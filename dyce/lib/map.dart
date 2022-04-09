@@ -33,7 +33,10 @@ class _MapPageState extends State<MapPage> {
                 height: 80.0,
                 point: LatLng(35.30013581376048, -120.66229826872282),
                 builder: (ctx) => Container(
-                  child: FlutterLogo(),
+                  child: const IconButton(
+                    icon: Icon(Icons.gamepad),
+                    onPressed: null,
+                  ),
                 ),
               ),
             ],
