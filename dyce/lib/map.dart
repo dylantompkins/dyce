@@ -14,6 +14,14 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   final Location location = Location();
 
+  @override
+  void initState() {
+    super.initState();
+    location.onLocationChanged.listen((event) {
+      setState(() {});
+    });
+  }
+
   Future<LocationData> _getLocation() async {
     bool _serviceEnabled;
     PermissionStatus _permissionGranted;
@@ -88,7 +96,10 @@ class _MapPageState extends State<MapPage> {
               ],
             );
           } else {
-            return const CircularProgressIndicator();
+            return Container(
+              child: const CircularProgressIndicator(),
+              alignment: Alignment.center,
+            );
           }
         },
       ),
