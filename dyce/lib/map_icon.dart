@@ -1,16 +1,16 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
-class GameIcon extends StatefulWidget {
-  const GameIcon({Key? key, required this.fg}) : super(key: key);
+class MapIcon extends StatefulWidget {
+  const MapIcon({Key? key, required this.fg}) : super(key: key);
 
   final FlameGame fg;
 
   @override
-  State<GameIcon> createState() => _GameIconState();
+  State<MapIcon> createState() => _MapIconState();
 }
 
-class _GameIconState extends State<GameIcon> {
+class _MapIconState extends State<MapIcon> {
   @override
   Widget build(BuildContext context) {
     void _pushGame() {
