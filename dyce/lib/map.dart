@@ -1,3 +1,4 @@
+import 'package:dyce/map_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -28,17 +29,21 @@ class _MapPageState extends State<MapPage> {
           ),
           MarkerLayerOptions(
             markers: [
-              Marker(
-                width: 80.0,
-                height: 80.0,
-                point: LatLng(35.30013581376048, -120.66229826872282),
-                builder: (ctx) => Container(
-                  child: const IconButton(
-                    icon: Icon(Icons.gamepad),
-                    onPressed: null,
-                  ),
-                ),
-              ),
+              MapIcon(
+                  context: context,
+                  myPoint:
+                      LatLng(35.30138795147228, -120.6624430938508), // pilling
+                  icon: Icons.gamepad),
+              MapIcon(
+                  context: context,
+                  myPoint: LatLng(
+                      35.29690002811058, -120.65347967357083), // our dorm
+                  icon: Icons.soup_kitchen),
+              MapIcon(
+                context: context,
+                myPoint: LatLng(35.30000698691031, -120.66505265584695),
+                icon: Icons.money,
+              )
             ],
           ),
         ],
