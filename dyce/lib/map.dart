@@ -15,7 +15,7 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dyce Map'),
+        title: const Text('Dyce Map'),
       ),
       body: FlutterMap(
         options: MapOptions(

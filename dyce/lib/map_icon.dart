@@ -18,9 +18,24 @@ class MapIcon extends Marker {
           height: 80.0,
           point: myPoint,
           builder: (ctx) => IconButton(
-            icon: Icon(
-              icon,
-              color: Colors.green,
+            icon: Stack(
+              children: [
+                Icon(
+                  Icons.circle,
+                  color: Colors.black,
+                  size: IconTheme.of(context).size! + 15,
+                ),
+                Icon(
+                  icon,
+                  color: Theme.of(context).backgroundColor,
+                ),
+                Icon(
+                  Icons.circle_outlined,
+                  color: Theme.of(context).backgroundColor,
+                  size: IconTheme.of(context).size! + 15,
+                ),
+              ],
+              alignment: Alignment.center,
             ),
             onPressed: toPush == null
                 ? null
