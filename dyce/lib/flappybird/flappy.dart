@@ -68,6 +68,11 @@ class FlappyGame extends FlameGame
   }
 
   @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+  }
+
+  @override
   void update(double dt) {
     super.update(dt);
     if (player.gameOver) {
@@ -80,7 +85,7 @@ class FlappyGame extends FlameGame
 
     if (one.done) {
       remove(one);
-
+      finalScore++;
       one = Pipe(30, size.y / 2, (rng.nextInt(50 + 49) - 49))
         ..size = Vector2(30, size.y / 2)
         ..position = Vector2(size.x - 10, 0);
@@ -89,7 +94,7 @@ class FlappyGame extends FlameGame
 
     if (two.done) {
       remove(two);
-
+      finalScore++;
       two = Pipe(30, size.y / 2, (rng.nextInt(50 + 49) - 49))
         ..size = Vector2(30, size.y / 2)
         ..position = Vector2(size.x - 10, 0);
@@ -98,7 +103,7 @@ class FlappyGame extends FlameGame
 
     if (three.done) {
       remove(three);
-
+      finalScore++;
       three = Pipe(30, size.y / 2, (rng.nextInt(50 + 49) - 49))
         ..size = Vector2(30, size.y / 2)
         ..position = Vector2(size.x - 10, 0);
@@ -107,7 +112,7 @@ class FlappyGame extends FlameGame
 
     if (four.done) {
       remove(four);
-
+      finalScore++;
       four = Pipe(30, size.y / 2, (rng.nextInt(50 + 49) - 49))
         ..size = Vector2(30, size.y / 2)
         ..position = Vector2(size.x - 10, 0);
