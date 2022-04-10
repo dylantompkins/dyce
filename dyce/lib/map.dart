@@ -1,5 +1,6 @@
 import 'package:dyce/balldestroyer/game.dart';
 import 'package:dyce/details.dart';
+import 'package:dyce/flappybird/flappy.dart';
 import 'package:dyce/game_details.dart';
 import 'package:dyce/map_icon.dart';
 import 'package:dyce/pong.dart';
@@ -71,16 +72,46 @@ class _MapPageState extends State<MapPage> {
               'ocob': LatLng(35.30000698691031, -120.66505265584695),
             };
 
+            Details pillingDet = Details(
+              image: Image.asset("images/pilling.jpg").image,
+              name: "Frank E. Pilling Computer Science (Bldg 14)",
+              description: "Where the CS goblins live.",
+            );
+
+            Details ocobDet = Details(
+              image: Image.asset('images/ocob.jpg').image,
+              name: 'Orfalea College of Business',
+              description:
+                  'The Orfalea College of Business (OCOB) prepares career-ready business leaders through hands-on discovery and dedicated mentorship. A curriculum infused with cutting edge technology trends, and supplemented by cultural and social service experience, gives students the knowledge and experience needed to thrive in California and the global economy. Our graduates are innovative problem solvers, prepared to excel in a variety of business roles and catalyze positive change, wherever they are.',
+            );
+
+            Details yakDet = Details(
+              image: Image.asset('images/yak.jpg').image,
+              name: 'yakʔitʸutʸu',
+              description:
+                  'yakʔitʸutʸu is proudly named in honor of and in partnership with the Northern Chumash, the Indigenous Peoples of San Luis Obispo County. Each residential hall is named after yak titʸu titʸu yak tiłhini Northern Chumash tribal locations throughout the Central Coast region.',
+            );
+
+            Details flapDet = Details(
+              image: Image.asset('images/flap.png').image,
+              name: 'Ice Jump',
+              description:
+                  'Achieve the highest score by tapping away to escape the cave. Do you have what it takes?',
+            );
+
+            Details ballDet = Details(
+              image: Image.asset('images/ball.png').image,
+              name: 'Brick Breaker',
+              description:
+                  'Destroy every brick by shooting a line of 20 balls across your screen. Lowest time wins!',
+            );
+
             Details pongDet = Details(
               image: Image.asset("images/pong.png").image,
               name: "Pong",
-              description: "A classic.",
+              description:
+                  "Can you outscore your friends in this classic game?",
             );
-
-            Details pillingDet = Details(
-                image: Image.asset("images/pilling.jpg").image,
-                name: "Pilling",
-                description: "Where the CS goblins live.");
 
             return FlutterMap(
               options: MapOptions(
@@ -116,9 +147,9 @@ class _MapPageState extends State<MapPage> {
                         currLoc: currLoc,
                         gameLoc: locations['dorms']!,
                         context: context,
-                        fg: SimplePongGame(),
-                        gameDet: pongDet,
-                        locationDet: pillingDet,
+                        fg: BallDestroyer(),
+                        gameDet: ballDet,
+                        locationDet: yakDet,
                       ),
                     ),
                     MapIcon(
@@ -129,9 +160,9 @@ class _MapPageState extends State<MapPage> {
                         currLoc: currLoc,
                         gameLoc: locations['ocob']!,
                         context: context,
-                        fg: SimplePongGame(),
-                        locationDet: pillingDet,
-                        gameDet: pongDet,
+                        fg: FlappyGame(),
+                        locationDet: ocobDet,
+                        gameDet: flapDet,
                       ),
                     ),
                     Marker(
