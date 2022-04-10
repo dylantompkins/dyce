@@ -17,6 +17,7 @@ class Player extends PositionComponent {
   Vector2 screenSize = Vector2(0, 0);
 
   Vector2 lastPos = Vector2(0, 0);
+  //Vector2 thumb = Vector2(0, 0);
 
   Player(Vector2 start, Vector2 screens) {
     root = start;
@@ -38,6 +39,16 @@ class Player extends PositionComponent {
       canvas.drawCircle(Offset(0, 0), 10, _paint);
     }
   }
+
+  // void setThumbX(double x) {
+  //   thumb.x = x;
+  //   rotateBallLine();
+  // }
+
+  // void setThumbY(double y) {
+  //   thumb.y = y;
+  //   rotateBallLine();
+  // }
 
   //show ball line when touching screen
   void initializeBallLine() {
