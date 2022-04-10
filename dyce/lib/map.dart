@@ -166,8 +166,17 @@ class _MapPageState extends State<MapPage> {
             );
           } else {
             return Container(
-              child: const CircularProgressIndicator(),
               alignment: Alignment.center,
+              child: Column(
+                children: [
+                  const Spacer(),
+                  const CircularProgressIndicator(),
+                  const Text(
+                    "Make sure your location permissions are turned on for your browser.",
+                  ),
+                  const Spacer(),
+                ],
+              ),
             );
           }
         },
