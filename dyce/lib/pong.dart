@@ -184,7 +184,7 @@ class Ball extends PositionComponent with CollisionCallbacks {
   Ball(Vector2 size) {
     screen = size;
 
-    direction = Vector2(5, -5);
+    direction = Vector2(rng.nextInt(5) + 1, -(rng.nextInt(5) + 1.0));
   }
 
   //hitbox for the rectangle
@@ -207,7 +207,7 @@ class Ball extends PositionComponent with CollisionCallbacks {
       position.add(direction);
     }
     if (position.y > screen.y + 50) {
-      direction = Vector2(5, -5);
+      direction = Vector2(rng.nextInt(5) + 1, -(rng.nextInt(5) + 1.0));
       gameOver = true;
       position.x = screen.x / 2;
       position.y = screen.y / 2;
