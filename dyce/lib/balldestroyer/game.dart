@@ -9,7 +9,6 @@ import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/gestures.dart';
-import 'dart:math';
 
 import 'package:flame/timer.dart';
 
@@ -64,7 +63,7 @@ class BallDestroyer extends FlameGame
       ..position = Vector2(0, 0)
       ..anchor = Anchor.center;
 
-    player = Player(Vector2(size.x / 2, size.y - 20));
+    player = Player(Vector2(size.x / 2, size.y - 20), size);
     add(player);
 
     add(ball);
@@ -76,7 +75,6 @@ class BallDestroyer extends FlameGame
 
   @override
   void onTapDown(TapDownInfo info) {
-    print("working");
     player.initializeBallLine();
   }
 
@@ -85,7 +83,6 @@ class BallDestroyer extends FlameGame
   void onPanUpdate(DragUpdateInfo info) {
     player.rotateBallLine(info.eventPosition.game);
   }
-  
 }
 
 //Side of a brick
@@ -140,7 +137,6 @@ class Top extends PositionComponent with CollisionCallbacks {
     canvas.drawRect(Rect.fromLTWH(l, t, w, h), _paint);
   }
 }
-
 
 /** 
 * TODO: When the ball hits the bottom save that location
@@ -198,5 +194,5 @@ class Ball extends PositionComponent with CollisionCallbacks {
   }
 
   //Balls dont speed up when hitting a wall or a brick
-  
+
 }
