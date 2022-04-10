@@ -82,11 +82,6 @@ class _MapPageState extends State<MapPage> {
                   markers: [
                     MapIcon(
                       context: context,
-                      myPoint: currLoc,
-                      icon: Icons.person,
-                    ),
-                    MapIcon(
-                      context: context,
                       myPoint: locations['pilling']!,
                       icon: Icons.gamepad,
                       toPush: GameDetails(
@@ -108,15 +103,43 @@ class _MapPageState extends State<MapPage> {
                       ),
                     ),
                     MapIcon(
+                      context: context,
+                      myPoint: locations['ocob']!,
+                      icon: Icons.money,
+                      toPush: GameDetails(
+                        currLoc: currLoc,
+                        gameLoc: locations['ocob']!,
                         context: context,
-                        myPoint: locations['ocob']!,
-                        icon: Icons.money,
-                        toPush: GameDetails(
-                          currLoc: currLoc,
-                          gameLoc: locations['ocob']!,
-                          context: context,
-                          fg: SimplePongGame(),
-                        )),
+                        fg: SimplePongGame(),
+                      ),
+                    ),
+                    Marker(
+                      width: 25,
+                      height: 25,
+                      point: currLoc,
+                      builder: (context) {
+                        return Stack(
+                          children: [
+                            Icon(
+                              Icons.circle,
+                              color: Colors.black,
+                              size: IconTheme.of(context).size!,
+                            ),
+                            Icon(
+                              Icons.person,
+                              color: Colors.green,
+                              size: IconTheme.of(context).size! - 15,
+                            ),
+                            Icon(
+                              Icons.circle_outlined,
+                              color: Colors.green,
+                              size: IconTheme.of(context).size!,
+                            ),
+                          ],
+                          alignment: Alignment.center,
+                        );
+                      },
+                    ),
                   ],
                 ),
               ],
