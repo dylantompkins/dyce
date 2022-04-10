@@ -14,18 +14,9 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   final Location location = Location();
 
-  @override
-  void initState() {
-    super.initState();
-    location.onLocationChanged.listen((event) {
-      setState(() {});
-    });
-  }
-
   Future<LocationData> _getLocation() async {
     bool _serviceEnabled;
     PermissionStatus _permissionGranted;
-    LocationData _locationData;
 
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
@@ -51,6 +42,13 @@ class _MapPageState extends State<MapPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dyce Map'),
+        actions: [
+          ElevatedButton(
+              onPressed: () {
+                setState(() {});
+              },
+              child: Icon(Icons.refresh))
+        ],
       ),
       body: FutureBuilder<LocationData>(
         future: _getLocation(),
