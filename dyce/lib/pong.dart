@@ -92,6 +92,15 @@ class SimplePongGame extends FlameGame
         etc......
         player,
       */
+    Bound leftBound = Bound(0, 10, 15, size.y, false)
+      ..position = Vector2(0, 0)
+      ..anchor = Anchor.center;
+    add(leftBound);
+
+    Bound rightBound = Bound(size.x - 15, 10, 15, size.y, false)
+      ..position = Vector2(0, 0)
+      ..anchor = Anchor.center;
+    add(rightBound);
 
     add(player);
     add(ball);
@@ -215,7 +224,7 @@ class Ball extends PositionComponent with CollisionCallbacks {
   @override
   void onCollision(Set<Vector2> points, PositionComponent other) {
     //Hits right side
-    if (other is ScreenHitbox) {
+    if (other is Bound) {
       direction = Vector2(-direction.x, direction.y);
     } else if (other is Player) {
       score++;
@@ -229,6 +238,37 @@ class Ball extends PositionComponent with CollisionCallbacks {
   //Will run with anything with a hitbox
   @override
   void onCollisionEnd(PositionComponent other) {}
+}
+
+class Bound extends PositionComponent with CollisionCallbacks {
+  final _paint = Paint()..color = Color.fromARGB(255, 255, 255, 255);
+
+  late double l;
+  late double t;
+  late double w;
+  late double h;
+  late bool show;
+
+  Bound(double left, double top, double width, double height, bool s) {
+    position = Vector2(left, top);
+    l = left;
+    t = top;
+    w = width;
+    h = height;
+    show = s;
+  }
+
+  //hitbox for the rectangle
+  Future<void> onLoad() async {
+    add(RectangleHitbox(position: Vector2(l, t), size: Vector2(w, h + 10)));
+  }
+
+  @override
+  void render(Canvas canvas) {
+    if (show) {
+      canvas.drawRect(Rect.fromLTWH(l, t, w, h), _paint);
+    }
+  }
 }
 
 class AI extends PositionComponent with CollisionCallbacks {

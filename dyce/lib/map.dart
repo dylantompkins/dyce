@@ -116,7 +116,7 @@ class _MapPageState extends State<MapPage> {
                         currLoc: currLoc,
                         gameLoc: locations['dorms']!,
                         context: context,
-                        fg: BallDestroyer(),
+                        fg: SimplePongGame(),
                         gameDet: pongDet,
                         locationDet: pillingDet,
                       ),
