@@ -172,6 +172,8 @@ class Ball extends PositionComponent with CollisionCallbacks {
   int score = 0;
   bool gameOver = false;
 
+  int increment = 1;
+
   TextPaint color = TextPaint(
       style: TextStyle(
     color: Color.fromARGB(255, 77, 62, 62),
@@ -210,6 +212,9 @@ class Ball extends PositionComponent with CollisionCallbacks {
       position.x = screen.x / 2;
       position.y = screen.y / 2;
     }
+    if (direction.y.abs() > 18) {
+      increment = 0;
+    }
   }
 
   int getScore() {
@@ -224,14 +229,15 @@ class Ball extends PositionComponent with CollisionCallbacks {
   @override
   void onCollision(Set<Vector2> points, PositionComponent other) {
     //Hits right side
-    if (other is Bound) {
-      direction = Vector2(-direction.x, direction.y);
-    } else if (other is Player) {
+    if (other is Player) {
       score++;
-      position.y -= 10;
+      position.y -= 20;
       direction = Vector2(direction.x, -direction.y);
     } else if (other is AI) {
-      direction = Vector2(direction.x, -direction.y + 1);
+      position.y += 20;
+      direction = Vector2(direction.x, -direction.y + increment);
+    } else if (other is Bound) {
+      direction = Vector2(-direction.x, direction.y);
     }
   }
 
