@@ -1,3 +1,4 @@
+import 'package:dyce/game_details.dart';
 import 'package:dyce/map.dart';
 import 'package:flutter/material.dart';
 

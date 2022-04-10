@@ -70,7 +70,7 @@ class _MapPageState extends State<MapPage> {
                     MapIcon(
                         context: context,
                         myPoint: LatLng(
-                            35.30138795147228, -120.6624430938508), // pilling
+                            35.30013245239185, -120.66216538773018), // pilling
                         icon: Icons.gamepad),
                     MapIcon(
                         context: context,
