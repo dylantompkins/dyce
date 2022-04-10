@@ -1,3 +1,4 @@
+import 'package:dyce/details.dart';
 import 'package:dyce/game_details.dart';
 import 'package:dyce/map_icon.dart';
 import 'package:dyce/pong.dart';
@@ -67,6 +68,17 @@ class _MapPageState extends State<MapPage> {
               'ocob': LatLng(35.30000698691031, -120.66505265584695),
             };
 
+            Details pongDet = Details(
+              image: Image.asset("images/pong.png").image,
+              name: "Pong",
+              description: "A classic.",
+            );
+
+            Details pillingDet = Details(
+                image: Image.asset("images/pilling.jpg").image,
+                name: "Pilling",
+                description: "Where the CS goblins live.");
+
             return FlutterMap(
               options: MapOptions(
                 center: LatLng(35.301366049343784, -120.66240555707458),
@@ -89,6 +101,8 @@ class _MapPageState extends State<MapPage> {
                         gameLoc: locations['pilling']!,
                         context: context,
                         fg: SimplePongGame(),
+                        gameDet: pongDet,
+                        locationDet: pillingDet,
                       ),
                     ),
                     MapIcon(
@@ -100,6 +114,8 @@ class _MapPageState extends State<MapPage> {
                         gameLoc: locations['dorms']!,
                         context: context,
                         fg: SimplePongGame(),
+                        gameDet: pongDet,
+                        locationDet: pillingDet,
                       ),
                     ),
                     MapIcon(
@@ -111,6 +127,8 @@ class _MapPageState extends State<MapPage> {
                         gameLoc: locations['ocob']!,
                         context: context,
                         fg: SimplePongGame(),
+                        locationDet: pillingDet,
+                        gameDet: pongDet,
                       ),
                     ),
                     Marker(
