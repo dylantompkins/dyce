@@ -1,5 +1,6 @@
 import 'package:dyce/game_details.dart';
 import 'package:dyce/map_icon.dart';
+import 'package:dyce/pong.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -81,11 +82,18 @@ class _MapPageState extends State<MapPage> {
                   markers: [
                     MapIcon(
                       context: context,
+                      myPoint: currLoc,
+                      icon: Icons.person,
+                    ),
+                    MapIcon(
+                      context: context,
                       myPoint: locations['pilling']!,
                       icon: Icons.gamepad,
                       toPush: GameDetails(
                         currLoc: currLoc,
                         gameLoc: locations['pilling']!,
+                        context: context,
+                        fg: SimplePongGame(),
                       ),
                     ),
                     MapIcon(
@@ -95,6 +103,8 @@ class _MapPageState extends State<MapPage> {
                       toPush: GameDetails(
                         currLoc: currLoc,
                         gameLoc: locations['dorms']!,
+                        context: context,
+                        fg: SimplePongGame(),
                       ),
                     ),
                     MapIcon(
@@ -104,12 +114,9 @@ class _MapPageState extends State<MapPage> {
                         toPush: GameDetails(
                           currLoc: currLoc,
                           gameLoc: locations['ocob']!,
+                          context: context,
+                          fg: SimplePongGame(),
                         )),
-                    MapIcon(
-                      context: context,
-                      myPoint: currLoc,
-                      icon: Icons.person,
-                    )
                   ],
                 ),
               ],
