@@ -1,6 +1,8 @@
+import 'package:dyce/balldestroyer/game.dart';
 import 'package:dyce/flappybird/flappy.dart';
 import 'package:dyce/game_details.dart';
 import 'package:dyce/map.dart';
+import 'package:dyce/pong.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
@@ -28,7 +30,7 @@ class DyceApp extends StatelessWidget {
           // is not restarted.
           primarySwatch: Colors.lightBlue,
         ),
-        home: GameWidget(game: FlappyGame())
+        home: GameWidget(game: BallDestroyer())
         //const MapPage(),
         );
   }
