@@ -18,6 +18,14 @@ class FlappyGame extends FlameGame
   late Bird player;
   late Pipe one;
 
+  late Pipe two;
+  late Pipe three;
+
+  late Pipe four;
+
+  late int finalScore;
+
+  Random rng = Random();
   @override
   Color backgroundColor() => Color.fromARGB(70, 0, 0, 0);
 
@@ -29,19 +37,82 @@ class FlappyGame extends FlameGame
 
     player = Bird()
       ..size = Vector2(20, 20)
-      ..position = Vector2(size.x / 3.5, size.y / 2);
+      ..position = Vector2(size.x / 5, size.y / 2);
     add(player);
 
-    one = Pipe(30, size.y / 2)
+    one = Pipe(30, size.y / 2, (rng.nextInt(100 + 99) - 99))
       ..size = Vector2(30, size.y / 2)
-      ..position = Vector2(size.x / 2, 0);
+      ..position = Vector2(size.x - 10, 0);
 
     add(one);
+
+    two = Pipe(30, size.y / 2, (rng.nextInt(100 + 99) - 99))
+      ..size = Vector2(30, size.y / 2)
+      ..position = Vector2(size.x + 100, 0);
+
+    add(two);
+
+    three = Pipe(30, size.y / 2, (rng.nextInt(100 + 99) - 99))
+      ..size = Vector2(30, size.y / 2)
+      ..position = Vector2(size.x + 200, 0);
+
+    add(three);
+
+    four = Pipe(30, size.y / 2, (rng.nextInt(100 + 99) - 99))
+      ..size = Vector2(30, size.y / 2)
+      ..position = Vector2(size.x + 300, 0);
+
+    add(four);
+
+    add(ScreenHitbox());
   }
 
   @override
   void update(double dt) {
     super.update(dt);
+    if (player.gameOver) {
+      one.gameOver = true;
+      two.gameOver = true;
+
+      three.gameOver = true;
+      four.gameOver = true;
+    }
+
+    if (one.done) {
+      remove(one);
+
+      one = Pipe(30, size.y / 2, (rng.nextInt(50 + 49) - 49))
+        ..size = Vector2(30, size.y / 2)
+        ..position = Vector2(size.x - 10, 0);
+      add(one);
+    }
+
+    if (two.done) {
+      remove(two);
+
+      two = Pipe(30, size.y / 2, (rng.nextInt(50 + 49) - 49))
+        ..size = Vector2(30, size.y / 2)
+        ..position = Vector2(size.x - 10, 0);
+      add(two);
+    }
+
+    if (three.done) {
+      remove(three);
+
+      three = Pipe(30, size.y / 2, (rng.nextInt(50 + 49) - 49))
+        ..size = Vector2(30, size.y / 2)
+        ..position = Vector2(size.x - 10, 0);
+      add(three);
+    }
+
+    if (four.done) {
+      remove(four);
+
+      four = Pipe(30, size.y / 2, (rng.nextInt(50 + 49) - 49))
+        ..size = Vector2(30, size.y / 2)
+        ..position = Vector2(size.x - 10, 0);
+      add(four);
+    }
   }
 
   @override
@@ -54,13 +125,36 @@ class FlappyGame extends FlameGame
 class Pipe extends PositionComponent with CollisionCallbacks {
   double wi = 0;
   double len = 0;
-  Pipe(double w, double l) {
+
+  bool gameOver = false;
+  bool done = false;
+
+  Pipe(double w, double l, int offset) {
     wi = w;
-    len = l;
-    Bound top = Bound(0, 0, w, l, true);
+    len = l + offset;
+    gameOver = false;
+    Bound top = Bound(0, 0.0, w, len, true);
     add(top);
 
-    Bound bottom = Bound(0, 0, w, l, true);
+    Bound bottom = Bound(0, len - 30, w, len * 2, true);
+    add(bottom);
+  }
+
+  //hitbox for the rectangle
+  Future<void> onLoad() async {
+    add(RectangleHitbox(position: position, size: size));
+  }
+
+  @override
+  void update(double dt) {
+    if (position.x < -20) {
+      done = true;
+    } else {
+      done = false;
+    }
+    if (!gameOver) {
+      position.add(Vector2(-3, 0));
+    }
   }
 }
 
@@ -84,7 +178,7 @@ class Bound extends PositionComponent with CollisionCallbacks {
 
   //hitbox for the rectangle
   Future<void> onLoad() async {
-    add(RectangleHitbox(position: Vector2(l, t), size: Vector2(w, h + 10)));
+    add(RectangleHitbox(position: Vector2(l, t), size: Vector2(w, h)));
   }
 
   @override
@@ -99,13 +193,17 @@ class Bird extends PositionComponent with CollisionCallbacks {
   final _paint = Paint()..color = Colors.white;
 
   double jump = -75;
-  double time = 3;
+  double time = 4;
 
   bool jumped = false;
 
+  bool gameOver = false;
+
   void move() {
-    position.add(Vector2(0, jump));
-    jumped = true;
+    if (!gameOver) {
+      position.add(Vector2(0, jump));
+      jumped = true;
+    }
   }
 
   @override
@@ -119,12 +217,20 @@ class Bird extends PositionComponent with CollisionCallbacks {
   }
 
   @override
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    if (other is ScreenHitbox || other is Bound) {
+      gameOver = true;
+    }
+  }
+
+  @override
   void update(double dt) {
     time += dt;
-    //print(time);
-    position.add(Vector2(0, time / 2.1 * time / 2.1));
+    if (!gameOver) {
+      position.add(Vector2(0, time / 2.1 * time / 2.1));
+    }
     if (jumped) {
-      time = 3;
+      time = 4;
       jumped = false;
     }
   }
