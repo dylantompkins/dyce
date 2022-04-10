@@ -1,3 +1,4 @@
+import 'package:dyce/database_test.dart';
 import 'package:dyce/game_details.dart';
 import 'package:dyce/map.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class DyceApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.lightBlue,
       ),
-      home: const MapPage(),
+      home: const DatabaseTest(),
     );
   }
 }

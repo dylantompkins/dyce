@@ -12,11 +12,10 @@ class Database {
       username: "dylan",
       password: Secret.cockroachPass,
     );
-    _openConnection();
   }
 
-  void _openConnection() async {
-    await connection.open();
+  Future openConnection() async {
+    return await connection.open();
   }
 
   //TODO player name can only be 50 chars
@@ -38,7 +37,7 @@ class Database {
     );
 
     if (isPresent.first.toString() == 'true') {
-      connection.query(
+      PostgreSQLResult update = await connection.query(
         "UPDATE @table SET score = @score WHERE player = '@player'",
         substitutionValues: {
           'table': table,
@@ -47,7 +46,7 @@ class Database {
         },
       );
     } else {
-      connection.query(
+      PostgreSQLResult insert = await connection.query(
         "INSERT INTO @table(player, score) VALUES ('@player', @score)",
         substitutionValues: {
           'table': table,
@@ -56,5 +55,11 @@ class Database {
         },
       );
     }
+  }
+
+  void simplePushScore() async {
+    PostgreSQLResult res = await connection
+        .query("INSERT INTO pong (player, score) VALUES ('alec', 8);");
+    print(res);
   }
 }
