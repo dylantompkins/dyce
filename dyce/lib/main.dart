@@ -1,24 +1,9 @@
 import 'package:dyce/game_details.dart';
 import 'package:dyce/map.dart';
-
-import 'package:dyce/balldestroyer/game.dart';
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
-//Needed to lock phone into portrait mode
-import 'package:flutter/services.dart';
-
 void main() {
-  //runApp(const MyApp());
-  final myGame = BallDestroyer();
-
-  //Locks the phone into portait mode
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-
-  runApp(GameWidget(game: myGame));
-  
+  runApp(const DyceApp());
 }
 
 class DyceApp extends StatelessWidget {
@@ -41,7 +26,7 @@ class DyceApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.lightBlue,
       ),
-      //home: const BallDestroyer(),
+      home: const MapPage(),
     );
   }
 }

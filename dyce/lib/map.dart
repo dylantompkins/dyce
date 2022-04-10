@@ -1,3 +1,4 @@
+import 'package:dyce/balldestroyer/game.dart';
 import 'package:dyce/details.dart';
 import 'package:dyce/game_details.dart';
 import 'package:dyce/map_icon.dart';
@@ -115,7 +116,7 @@ class _MapPageState extends State<MapPage> {
                         currLoc: currLoc,
                         gameLoc: locations['dorms']!,
                         context: context,
-                        fg: SimplePongGame(),
+                        fg: BallDestroyer(),
                         gameDet: pongDet,
                         locationDet: pillingDet,
                       ),
