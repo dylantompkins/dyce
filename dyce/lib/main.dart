@@ -1,5 +1,7 @@
+import 'package:dyce/flappybird/flappy.dart';
 import 'package:dyce/game_details.dart';
 import 'package:dyce/map.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -26,7 +28,8 @@ class DyceApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.lightBlue,
       ),
-      home: const MapPage(),
+      home: GameWidget(game: FlappyGame())
+      //const MapPage(),
     );
   }
 }
