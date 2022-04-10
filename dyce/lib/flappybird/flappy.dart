@@ -135,7 +135,7 @@ class FlappyGame extends FlameGame
     //print("working");
     if (player.gameOver) {
       finalScore = 0;
-      player.position.x = size.x / 2;
+      player.position.y = size.y / 2;
       player.gameOver = false;
       one.gameOver = false;
       two.gameOver = false;
