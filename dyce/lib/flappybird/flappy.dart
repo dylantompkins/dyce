@@ -23,11 +23,19 @@ class FlappyGame extends FlameGame
 
   late Pipe four;
 
-  late int finalScore;
+  int finalScore = 0;
+
+  String message = "Score:";
 
   Random rng = Random();
   @override
   Color backgroundColor() => Color.fromARGB(70, 0, 0, 0);
+  TextPaint color = TextPaint(
+      style: TextStyle(
+    color: Color.fromARGB(255, 77, 62, 62),
+    fontSize: 30.0,
+    fontFamily: 'RobotoMono',
+  ));
 
   @override
   Future<void> onLoad() async {
@@ -70,6 +78,7 @@ class FlappyGame extends FlameGame
   @override
   void render(Canvas canvas) {
     super.render(canvas);
+    color.render(canvas, "$message $finalScore", Vector2(10, 10));
   }
 
   @override
@@ -81,6 +90,7 @@ class FlappyGame extends FlameGame
 
       three.gameOver = true;
       four.gameOver = true;
+      message = "tap to restart";
     }
 
     if (one.done) {
@@ -123,7 +133,51 @@ class FlappyGame extends FlameGame
   @override
   void onTap() {
     //print("working");
-    player.move();
+    if (player.gameOver) {
+      finalScore = 0;
+      player.position.x = size.x / 2;
+      player.gameOver = false;
+      one.gameOver = false;
+      two.gameOver = false;
+
+      three.gameOver = false;
+      four.gameOver = false;
+
+      remove(one);
+      remove(two);
+      remove(three);
+      remove(four);
+      one = Pipe(30, size.y / 2, (rng.nextInt(100 + 99) - 99))
+        ..size = Vector2(30, size.y / 2)
+        ..position = Vector2(size.x - 10, 0);
+
+      add(one);
+
+      two = Pipe(30, size.y / 2, (rng.nextInt(100 + 99) - 99))
+        ..size = Vector2(30, size.y / 2)
+        ..position = Vector2(size.x + 100, 0);
+
+      add(two);
+
+      three = Pipe(30, size.y / 2, (rng.nextInt(100 + 99) - 99))
+        ..size = Vector2(30, size.y / 2)
+        ..position = Vector2(size.x + 200, 0);
+
+      add(three);
+
+      four = Pipe(30, size.y / 2, (rng.nextInt(100 + 99) - 99))
+        ..size = Vector2(30, size.y / 2)
+        ..position = Vector2(size.x + 300, 0);
+
+      add(four);
+      player.gameOver = false;
+
+      message = "Score:";
+    }
+
+    if (!player.gameOver) {
+      player.move();
+    }
   }
 }
 
