@@ -33,9 +33,19 @@ class SimplePongGame extends FlameGame
   late Player player;
   late AI opponent;
   late Ball ball;
+  bool gameOver = false;
+
+  int score = 0;
 
   @override
-  Color backgroundColor() => Color.fromARGB(70, 12, 44, 187);
+  Color backgroundColor() => Color.fromARGB(70, 0, 0, 0);
+
+  TextPaint color = TextPaint(
+      style: TextStyle(
+    color: Color.fromARGB(255, 77, 62, 62),
+    fontSize: 30.0,
+    fontFamily: 'RobotoMono',
+  ));
 
   @override
   Future<void> onLoad() async {
@@ -51,7 +61,7 @@ class SimplePongGame extends FlameGame
     //size = ;
 
     camera.viewport = FixedResolutionViewport(Vector2(400, 600));
-    
+
     player = Player()
       //`size` is a `Vector2` variable from the game class and it holds the current dimension of the game area, where `x` is the horizontal dimension, or the width, and `y` the vertical dimension, or the height.
       ..position = Vector2(size.x / 2, size.y - (size.y / 7))
@@ -89,6 +99,31 @@ class SimplePongGame extends FlameGame
     add(ScreenHitbox());
   }
 
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+    color.render(canvas, "${ball.score}", Vector2(30, 10));
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    if (ball.gameOver) {
+      gameOver = true;
+      score = ball.score;
+    } else {
+      gameOver = false;
+    }
+  }
+
+  @override
+  void onTap() {
+    if (ball.gameOver) {
+      gameOver = false;
+      ball.gameOver = false;
+      ball.score = 0;
+    }
+  }
   // @override
   // void onPanUpdate(DragUpdateInfo info) {
   //   player.move(info.delta.game);
@@ -125,11 +160,20 @@ class Ball extends PositionComponent with CollisionCallbacks {
   //gets the screenSize from the gameClass
   late Vector2 screen;
 
+  int score = 0;
+  bool gameOver = false;
+
+  TextPaint color = TextPaint(
+      style: TextStyle(
+    color: Color.fromARGB(255, 77, 62, 62),
+    fontSize: 20.0,
+    fontFamily: 'Lato',
+  ));
+
   Ball(Vector2 size) {
     screen = size;
 
-    direction =
-        Vector2(rng.nextInt(5) + 1.toDouble(), rng.nextInt(5) + 1.toDouble());
+    direction = Vector2(5, -5);
   }
 
   //hitbox for the rectangle
@@ -141,15 +185,30 @@ class Ball extends PositionComponent with CollisionCallbacks {
   @override
   void render(Canvas canvas) {
     canvas.drawRect(size.toRect(), _paint);
+    if (gameOver) {
+      color.render(canvas, "Tap to reset score $score", Vector2(-10, 10));
+    }
   }
 
   @override
   void update(double t) {
-    position.add(direction);
-    print(screen.x);
-    if (position.y > screen.y) {
-      position = screen / 2;
+    if (!gameOver) {
+      position.add(direction);
     }
+    if (position.y > screen.y + 50) {
+      direction = Vector2(5, -5);
+      gameOver = true;
+      position.x = screen.x / 2;
+      position.y = screen.y / 2;
+    }
+  }
+
+  int getScore() {
+    return score;
+  }
+
+  bool getGameOver() {
+    return gameOver;
   }
 
   //will run with anything with a hitbox
@@ -159,9 +218,11 @@ class Ball extends PositionComponent with CollisionCallbacks {
     if (other is ScreenHitbox) {
       direction = Vector2(-direction.x, direction.y);
     } else if (other is Player) {
+      score++;
+      position.y -= 10;
       direction = Vector2(direction.x, -direction.y);
     } else if (other is AI) {
-      direction = Vector2(direction.x, -direction.y);
+      direction = Vector2(direction.x, -direction.y + 1);
     }
   }
 
