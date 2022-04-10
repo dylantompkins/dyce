@@ -1,4 +1,4 @@
-import 'package:dyce/database.dart';
+import 'package:dyce/firestore.dart';
 import 'package:flutter/material.dart';
 
 class DatabaseTest extends StatefulWidget {
@@ -16,41 +16,32 @@ class _DatabaseTestState extends State<DatabaseTest> {
 
   void _pushInput() {
     // db.pushScore(table: 'pong', player: player, score: score);
-    db.simplePushScore();
+    db.pushScore(player: player, score: score);
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: db.openConnection(),
-      builder: ((context, snapshot) {
-        if (snapshot.hasData) {
-          return Scaffold(
-            body: Column(
-              children: [
-                const Text("Player"),
-                TextField(
-                  onChanged: (value) {
-                    player = value;
-                  },
-                ),
-                const Text("Score"),
-                TextField(
-                  onChanged: (value) {
-                    score = int.parse(value);
-                  },
-                ),
-                IconButton(
-                  onPressed: _pushInput,
-                  icon: const Icon(Icons.add),
-                ),
-              ],
-            ),
-          );
-        } else {
-          return const CircularProgressIndicator();
-        }
-      }),
+    return Scaffold(
+      body: Column(
+        children: [
+          const Text("Player"),
+          TextField(
+            onChanged: (value) {
+              player = value;
+            },
+          ),
+          const Text("Score"),
+          TextField(
+            onChanged: (value) {
+              score = int.parse(value);
+            },
+          ),
+          IconButton(
+            onPressed: _pushInput,
+            icon: const Icon(Icons.add),
+          ),
+        ],
+      ),
     );
   }
 }
