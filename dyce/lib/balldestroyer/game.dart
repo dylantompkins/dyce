@@ -35,14 +35,38 @@ class BallDestroyer extends FlameGame
   late Player player;
 
   bool inAimState = false;
-  bool isInGame = false;
+  bool isInGame = true;
   Vector2 lastPos = Vector2(0, 0);
 
   Timer spawnBall = Timer(0.15, repeat: true);
 
+  final countdown = Timer(3);
+
+  final goTime = Timer(6);
+
+  double time = 3;
+
   int ballCount = 0;
   int maxBalls = 20;
 
+  int bricksLeft = 11;
+
+  List list = <Brick>[];
+
+  List listOfBalls = <Ball>[];
+
+  bool gameOver = false;
+
+  bool go = false;
+  bool showGo = false;
+
+  late int finalTime;
+
+  TextPaint textPaint = TextPaint(
+      style: TextStyle(fontSize: 20, color: Color.fromARGB(255, 0, 0, 0)));
+
+  TextPaint goo = TextPaint(
+      style: TextStyle(fontSize: 50, color: Color.fromARGB(255, 0, 0, 0)));
   @override
   Color backgroundColor() => Color.fromARGB(70, 0, 18, 85);
 
@@ -96,52 +120,132 @@ class BallDestroyer extends FlameGame
     add(component);
 
     //Hardcoded bricks
-    Brick one = Brick(50, 50, 10)
+    Brick one = Brick(50, 50, 20)
       ..position = Vector2(200, 200)
       ..anchor = Anchor.center;
     add(one);
-
-    Brick two = Brick(30, 30, 30)
+    list.add(one);
+    Brick two = Brick(30, 30, 20)
       ..position = Vector2(100, 300)
       ..anchor = Anchor.center;
     add(two);
 
-    Brick three = Brick(30, 30, 30)
+    list.add(two);
+
+    Brick three = Brick(30, 30, 20)
       ..position = Vector2(200, 300)
       ..anchor = Anchor.center;
     add(three);
 
-    Brick four = Brick(30, 30, 30)
+    list.add(two);
+
+    Brick four = Brick(30, 30, 20)
       ..position = Vector2(250, 300)
       ..anchor = Anchor.center;
     add(four);
 
-    Brick five = Brick(30, 30, 30)
+    list.add(four);
+
+    Brick five = Brick(30, 30, 20)
       ..position = Vector2(150, 300)
       ..anchor = Anchor.center;
     add(five);
+    list.add(five);
 
     Brick six = Brick(50, 50, 10)
       ..position = Vector2(140, 200)
       ..anchor = Anchor.center;
     add(six);
 
+    list.add(six);
+
     Brick seven = Brick(30, 30, 5, Color.fromARGB(255, 255, 128, 0))
       ..position = Vector2(180, 260)
       ..anchor = Anchor.center;
     add(seven);
 
+    list.add(seven);
     Brick eight = Brick(225, 30, 20, Color.fromARGB(255, 138, 128, 128))
-      ..position = Vector2(80, 100)
+      ..position = Vector2(80, 150)
       ..anchor = Anchor.center;
     add(eight);
+
+    list.add(eight);
+    Brick nine = Brick(150, 50, 20, Color.fromARGB(255, 138, 128, 128))
+      ..position = Vector2(120, 50)
+      ..anchor = Anchor.center;
+    add(nine);
+    list.add(nine);
+    Brick ten = Brick(50, 50, 2, Color.fromARGB(255, 94, 2, 2))
+      ..position = Vector2(20, 370)
+      ..anchor = Anchor.center;
+    add(ten);
+    list.add(ten);
+
+    Brick eleve = Brick(50, 50, 2, Color.fromARGB(255, 94, 2, 2))
+      ..position = Vector2(330, 370)
+      ..anchor = Anchor.center;
+    add(eleve);
+    list.add(eleve);
+  }
+
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+    textPaint.render(
+        canvas, "Time: ${time.round().abs()}", Vector2(size.x / 2, 0));
+    if (showGo) {
+      goo.render(canvas, "GO!!!!", Vector2(size.x / 2, size.y / 2 + 50));
+    }
+    if (gameOver) {
+      goo.render(canvas, "GAME OVER", Vector2(size.x / 2, size.y / 2 + 50));
+    }
   }
 
   @override
   void update(double dt) {
     super.update(dt);
+
+    countdown.update(dt);
+    goTime.update(dt);
+
+    if (countdown.finished && !go) {
+      go = true;
+      isInGame = false;
+      time = 0;
+      showGo = true;
+    }
+    if (goTime.finished) {
+      showGo = false;
+    }
+    if (!gameOver) {
+      time -= dt;
+    }
+
     if (ballCount <= maxBalls) {
       spawnBall.update(dt);
+    }
+
+    for (int i = 0; i < list.length; i++) {
+      if (list[i].life() <= 0) {
+        list.removeAt(i);
+      }
+    }
+
+    for (int i = 0; i < listOfBalls.length; i++) {
+      if (listOfBalls[i].movement() == false) {
+        listOfBalls.removeAt(i);
+      }
+    }
+    if (listOfBalls.length <= 0) {
+      isInGame = false;
+    } else {
+      isInGame = true;
+    }
+
+    if (list.length <= 0) {
+      finalTime = time.round();
+      gameOver = true;
     }
   }
 
@@ -172,10 +276,14 @@ class BallDestroyer extends FlameGame
       double yVel = (player.lastStuff().y - (size.y - 15));
 
       spawnBall.onTick = () async {
-        add(Ball(player.calculateSpeed((player.lastStuff().x - (size.x / 2)),
-            (player.lastStuff().y - (size.y - 15)), 10))
+        Ball ball = Ball(player.calculateSpeed(
+            (player.lastStuff().x - (size.x / 2)),
+            (player.lastStuff().y - (size.y - 15)),
+            10))
           ..position = Vector2(size.x / 2, size.y - 15)
-          ..anchor = Anchor.center);
+          ..anchor = Anchor.center;
+        add(ball);
+        listOfBalls.add(ball);
         ballCount++;
       };
 
@@ -190,7 +298,7 @@ class Brick extends PositionComponent with CollisionCallbacks {
   late double h;
   int lives = 10;
   Paint _paint = Paint()..color = Colors.white;
-
+  bool dead = false;
   TextPaint text =
       TextPaint(style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)));
 
@@ -201,14 +309,13 @@ class Brick extends PositionComponent with CollisionCallbacks {
 
     _paint.color = color;
 
-    //dont
-    Side middle = Side(-2, (h / 20), w + 2, h - (h / 20), false);
+    Side middle = Side(-0.25, 0, w + 0.25, h, false);
     add(middle);
 
-    Top top = Top(0, -1, w - 0.75, (h / 20) + 1, false);
+    Top top = Top(0, -0.5, w, h / 20, true);
     add(top);
 
-    Top bottom = Top(2, h / 2 - 2, w - 8, (h / 10), false);
+    Top bottom = Top(0, h / 2, w, h / 100, false);
     add(bottom);
   }
 
@@ -216,6 +323,10 @@ class Brick extends PositionComponent with CollisionCallbacks {
   //hitbox for the rectangle
   Future<void> onLoad() async {
     add(RectangleHitbox(position: Vector2(0, -1), size: Vector2(w, h + 20)));
+  }
+
+  int life() {
+    return lives;
   }
 
   @override
@@ -254,8 +365,7 @@ class Side extends PositionComponent with CollisionCallbacks {
 
   //hitbox for the rectangle
   Future<void> onLoad() async {
-    add(RectangleHitbox(
-        position: Vector2(l - 0.5, t), size: Vector2(w + 1, h)));
+    add(RectangleHitbox(position: Vector2(l, t), size: Vector2(w, h)));
   }
 
   @override
@@ -352,8 +462,8 @@ class Ball extends PositionComponent with CollisionCallbacks {
   //Hitbox for the ball
   //hitbox for the rectangle
   Future<void> onLoad() async {
-    //add(CircleHitbox(radius: 10));
-    add(RectangleHitbox(size: Vector2(10, 10)));
+    add(CircleHitbox(radius: 5));
+    //add(RectangleHitbox(size: Vector2(10, 10)));
   }
 
   //Move the ball back and forth
@@ -362,9 +472,9 @@ class Ball extends PositionComponent with CollisionCallbacks {
     countDown.update(t);
 
     if (countDown.finished) {
-      if (moving) {
+      if (moving && canCollide) {
         position.add(direction);
-      } else {
+      } else if (!moving) {
         //returns balls back to starting position
         if (position.x > 200) {
           position.add(Vector2(-10, 0));
@@ -378,16 +488,27 @@ class Ball extends PositionComponent with CollisionCallbacks {
     }
   }
 
+  bool movement() {
+    return moving;
+  }
+
   //Hits one of the borders
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     if (other is Side && canCollide) {
+      canCollide = false;
       direction = Vector2(-direction.x, direction.y);
     } else if (other is Top && canCollide) {
+      canCollide = false;
       direction = Vector2(direction.x, -direction.y);
     } else if (other is Bottom) {
       moving = false;
     }
-    //canCollide = false;
+    canCollide = true;
+  }
+
+  @override
+  void onCollisionEnd(PositionComponent other) {
+    canCollide = true;
   }
 }

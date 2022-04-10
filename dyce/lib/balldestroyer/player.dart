@@ -34,10 +34,8 @@ class Player extends PositionComponent {
   //renders the ball line
   @override
   void render(Canvas canvas) {
-
     if (inAimState) {
       canvas.drawCircle(Offset(0, 0), 10, _paint);
- 
     }
   }
 
@@ -76,7 +74,4 @@ class Player extends PositionComponent {
   void releaseBalls() {
     inAimState = false;
   }
-
 }
-
-
