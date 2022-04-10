@@ -1,3 +1,4 @@
+import 'package:dyce/game_details.dart';
 import 'package:dyce/map_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -54,6 +55,17 @@ class _MapPageState extends State<MapPage> {
         future: _getLocation(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            LatLng currLoc = LatLng(
+              snapshot.data!.latitude!,
+              snapshot.data!.longitude!,
+            );
+
+            final Map<String, LatLng> locations = {
+              'pilling': LatLng(35.30013245239185, -120.66216538773018),
+              'dorms': LatLng(35.29690002811058, -120.65347967357083),
+              'ocob': LatLng(35.30000698691031, -120.66505265584695),
+            };
+
             return FlutterMap(
               options: MapOptions(
                 center: LatLng(35.301366049343784, -120.66240555707458),
@@ -68,27 +80,36 @@ class _MapPageState extends State<MapPage> {
                 MarkerLayerOptions(
                   markers: [
                     MapIcon(
-                        context: context,
-                        myPoint: LatLng(
-                            35.30013245239185, -120.66216538773018), // pilling
-                        icon: Icons.gamepad),
-                    MapIcon(
-                        context: context,
-                        myPoint: LatLng(
-                            35.29690002811058, -120.65347967357083), // our dorm
-                        icon: Icons.soup_kitchen),
+                      context: context,
+                      myPoint: locations['pilling']!,
+                      icon: Icons.gamepad,
+                      toPush: GameDetails(
+                        currLoc: currLoc,
+                        gameLoc: locations['pilling']!,
+                      ),
+                    ),
                     MapIcon(
                       context: context,
-                      myPoint: LatLng(35.30000698691031, -120.66505265584695),
-                      icon: Icons.money,
+                      myPoint: locations['dorms']!,
+                      icon: Icons.soup_kitchen,
+                      toPush: GameDetails(
+                        currLoc: currLoc,
+                        gameLoc: locations['dorms']!,
+                      ),
                     ),
                     MapIcon(
                         context: context,
-                        myPoint: LatLng(
-                          snapshot.data!.latitude!,
-                          snapshot.data!.longitude!,
-                        ),
-                        icon: Icons.person)
+                        myPoint: locations['ocob']!,
+                        icon: Icons.money,
+                        toPush: GameDetails(
+                          currLoc: currLoc,
+                          gameLoc: locations['ocob']!,
+                        )),
+                    MapIcon(
+                      context: context,
+                      myPoint: currLoc,
+                      icon: Icons.person,
+                    )
                   ],
                 ),
               ],
