@@ -16,24 +16,28 @@ class Player extends PositionComponent {
 
   Vector2 screenSize = Vector2(0, 0);
 
-  var offsets = List.filled(5, Offset(0, 0));
+  Vector2 lastPos = Vector2(0, 0);
 
   Player(Vector2 start, Vector2 screens) {
     root = start;
     screenSize = screens;
+
+    //THIS CODE WORKs but position is in relation to the parent
+    // CircleComponent component = CircleComponent(
+    //     radius: 10,
+    //     position: Vector2(size.x / 2, size.y - 30),
+    //     paint: Paint()..color = Color.fromARGB(255, 180, 17, 17));
+    // component.renderShape = true;
+    // add(component);
   }
 
   //renders the ball line
   @override
   void render(Canvas canvas) {
-    if (inAimState) {
-      // canvas.drawCircle(
-      //     Offset(200 - position.x.abs(), position.y), 10, _paint);
 
-      //Circle at the starting position
-      for (int i = 0; i < 5; i++) {
-        canvas.drawCircle(offsets[i], 5, _paint);
-      }
+    if (inAimState) {
+      canvas.drawCircle(Offset(0, 0), 10, _paint);
+ 
     }
   }
 
@@ -44,23 +48,28 @@ class Player extends PositionComponent {
 
   //move ball line when screen moves
   void rotateBallLine(Vector2 thumb) {
-    //find the slope
-
-    //use that slope to add 4 balls onto the screen on the line
-
     position.x = thumb.x;
-    position.y = screenSize.y - 100;
-    double slope = (thumb.y - root.y) / (thumb.x - root.x);
-
-    double interval = slope / 5;
-    double xInterval = screenSize.x / 10;
-
-    //print(position.y * slope);
-    print(position.y);
-    for (int i = 0; i < 5; i++) {
-      offsets[i] = Offset(-xInterval * (i + 1), 0);
+    if (thumb.y > screenSize.y - (screenSize.y / 3)) {
+      position.y = thumb.y;
     }
-    
+    lastPos = thumb;
+  }
+
+  Vector2 lastStuff() {
+    return lastPos;
+  }
+
+  int getBalls() {
+    return ballNums;
+  }
+
+  Vector2 calculateSpeed(double xVel, double yVel, double speed) {
+    //Calculate unit vector
+    double bottom = sqrt(xVel * xVel + yVel * yVel);
+
+    Vector2 unit = Vector2(xVel / bottom, yVel / bottom);
+
+    return Vector2(unit.x * speed, unit.y * speed);
   }
 
   //release balls when no longer touching
@@ -68,6 +77,6 @@ class Player extends PositionComponent {
     inAimState = false;
   }
 
-  //player cancelled the ball input
-  void noMoreBallLine() {}
 }
+
+
