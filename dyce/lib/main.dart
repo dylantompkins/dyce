@@ -7,8 +7,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  BallDestroyer bruh = BallDestroyer();
-  runApp(GameWidget(game: bruh));
+  runApp(DyceApp());
 }
 
 class DyceApp extends StatelessWidget {

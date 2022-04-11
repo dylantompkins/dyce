@@ -83,7 +83,14 @@ class BallDestroyer extends FlameGame with HasCollisionDetection, PanDetector {
       ..position = Vector2(size.x / 2, size.y - (size.y / 7))
       // ..width = 100
       // ..height = 30
-      ..anchor = Anchor.center;
+      ..anchor = Anchor.topLeft;
+
+    Ball randomBall = Ball(Vector2(0, 0))
+      ..position = Vector2(0, 0)
+      ..size = Vector2(30, 30)
+      ..anchor = Anchor.topLeft;
+    add(randomBall);
+    print(randomBall.position.x + randomBall.size.x);
 
     //Adds the boundaries
     topBound = Top(0, 0, size.x, 15, true)
@@ -91,11 +98,11 @@ class BallDestroyer extends FlameGame with HasCollisionDetection, PanDetector {
       // ..width = size.x
       // ..height = 10
       //..size = Vector2(size.x * 2, 15)
-      ..anchor = Anchor.center;
+      ..anchor = Anchor.topLeft;
 
     leftBound = Side(0, 10, 15, size.y, true)
       ..position = Vector2(0, 0)
-      ..anchor = Anchor.center;
+      ..anchor = Anchor.topLeft;
 
     rightBound = Side(size.x - 15, 10, 15, size.y, true)
       ..position = Vector2(0, 0)
@@ -109,7 +116,7 @@ class BallDestroyer extends FlameGame with HasCollisionDetection, PanDetector {
 
     add(player);
 
-    //add(ball);
+    add(ball);
     add(topBound);
     add(leftBound);
     add(bottomBound);
@@ -125,46 +132,46 @@ class BallDestroyer extends FlameGame with HasCollisionDetection, PanDetector {
     //Hardcoded bricks
     Brick one = Brick(50, 50, 20)
       ..position = Vector2(200, 200)
-      ..anchor = Anchor.center;
+      ..anchor = Anchor.topLeft;
     add(one);
     list.add(one);
     Brick two = Brick(30, 30, 20)
       ..position = Vector2(100, 300)
-      ..anchor = Anchor.center;
+      ..anchor = Anchor.topLeft;
     add(two);
 
     list.add(two);
 
     Brick three = Brick(30, 30, 20)
       ..position = Vector2(200, 300)
-      ..anchor = Anchor.center;
+      ..anchor = Anchor.topLeft;
     add(three);
 
     list.add(two);
 
     Brick four = Brick(30, 30, 20)
       ..position = Vector2(250, 300)
-      ..anchor = Anchor.center;
+      ..anchor = Anchor.topLeft;
     add(four);
 
     list.add(four);
 
     Brick five = Brick(30, 30, 20)
       ..position = Vector2(150, 300)
-      ..anchor = Anchor.center;
+      ..anchor = Anchor.topLeft;
     add(five);
     list.add(five);
 
     Brick six = Brick(50, 50, 10)
       ..position = Vector2(140, 200)
-      ..anchor = Anchor.center;
+      ..anchor = Anchor.topLeft;
     add(six);
 
     list.add(six);
 
     Brick seven = Brick(30, 30, 5, Color.fromARGB(255, 255, 128, 0))
       ..position = Vector2(180, 260)
-      ..anchor = Anchor.center;
+      ..anchor = Anchor.topLeft;
     add(seven);
 
     list.add(seven);
@@ -176,18 +183,18 @@ class BallDestroyer extends FlameGame with HasCollisionDetection, PanDetector {
     list.add(eight);
     Brick nine = Brick(150, 50, 20, Color.fromARGB(255, 138, 128, 128))
       ..position = Vector2(120, 50)
-      ..anchor = Anchor.center;
+      ..anchor = Anchor.topLeft;
     add(nine);
     list.add(nine);
     Brick ten = Brick(50, 50, 2, Color.fromARGB(255, 94, 2, 2))
       ..position = Vector2(20, 370)
-      ..anchor = Anchor.center;
+      ..anchor = Anchor.topLeft;
     add(ten);
     list.add(ten);
 
     Brick eleve = Brick(50, 50, 2, Color.fromARGB(255, 94, 2, 2))
       ..position = Vector2(330, 370)
-      ..anchor = Anchor.center;
+      ..anchor = Anchor.topLeft;
     add(eleve);
     list.add(eleve);
   }
@@ -284,7 +291,9 @@ class BallDestroyer extends FlameGame with HasCollisionDetection, PanDetector {
             (player.lastStuff().y - (size.y - 15)),
             10))
           ..position = Vector2(size.x / 2, size.y - 15)
-          ..anchor = Anchor.center;
+          ..anchor = Anchor.topLeft
+          ..size.x = 10
+          ..size.y = 10;
         add(ball);
         listOfBalls.add(ball);
         ballCount++;
@@ -368,7 +377,8 @@ class Side extends PositionComponent with CollisionCallbacks {
 
   //hitbox for the rectangle
   Future<void> onLoad() async {
-    add(RectangleHitbox(position: Vector2(l, t), size: Vector2(w, h)));
+    add(RectangleHitbox(
+        position: Vector2(l, t), size: Vector2(w, h), anchor: Anchor.topLeft));
   }
 
   @override
