@@ -1,6 +1,8 @@
 # Dyce
 A game by Dylan Tompkins and Bryce Raymundo, built for SLO Hacks 2022
 
+https://devpost.com/software/dyce
+
 ## Inspiration
 We were inspired by games like Pokemon Go and Ingress which use the players location to create a more engaging gaming experience. We also wanted to find a way to enjoy the simple time-waster mobile games without intrusive ads. Finally, we wanted the future of our idea to be integral to the Cal Poly campus we have gotten to know very well over the past 2 quarters.
 
