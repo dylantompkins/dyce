@@ -71,8 +71,6 @@ class Ball extends PositionComponent with CollisionCallbacks {
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     if (other is Brick) {
-
-
       //first way to get hitbox
       Vector2 point = intersectionPoints.elementAt(0);
       bool xTopCheck = point.x <= other.x + other.width && point.x >= other.x;
@@ -80,7 +78,6 @@ class Ball extends PositionComponent with CollisionCallbacks {
 
       bool xSideCheck = point.x >= other.x + other.width || point.x <= other.x;
       bool ySideCheck = other.y + height <= point.y && other.y <= point.y;
-
 
       //second way
       //top collision
@@ -165,6 +162,23 @@ class Ball extends PositionComponent with CollisionCallbacks {
       moving = false;
     }
     canCollide = true;
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    if (other is Brick) {
+      Vector2 point = intersectionPoints.elementAt(0);
+      bool xTopCheck = point.x <= other.x + other.width && point.x >= other.x;
+      bool yTopCheck = other.y + other.height <= point.y || point.y <= other.y;
+
+      bool xSideCheck = point.x >= other.x + other.width || point.x <= other.x;
+      bool ySideCheck = other.y + height <= point.y && other.y <= point.y;
+      if (xTopCheck && yTopCheck) {
+        position.y += (direction.y);
+      } else if (xSideCheck && ySideCheck) {
+        position.y += (direction.x);
+      }
+    }
   }
 
   @override
