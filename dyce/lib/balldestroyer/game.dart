@@ -86,7 +86,7 @@ class BallDestroyer extends FlameGame with HasCollisionDetection, PanDetector {
       ..anchor = Anchor.topLeft;
 
     //Adds the boundaries
-    topBound = Top(0, 330, size.x, 15, true)
+    topBound = Top(0, 0, size.x, 15, true)
       ..position = Vector2(0, 0)
       // ..width = size.x
       // ..height = 10
@@ -125,63 +125,71 @@ class BallDestroyer extends FlameGame with HasCollisionDetection, PanDetector {
     add(component);
 
     //Hardcoded bricks
-    // Brick one = Brick(50, 50, 20)
-    //   ..position = Vector2(200, 200)
-    //   ..anchor = Anchor.topLeft;
-    // add(one);
-    // list.add(one);
-    // Brick two = Brick(30, 30, 20)
-    //   ..position = Vector2(100, 300)
-    //   ..anchor = Anchor.topLeft;
-    // add(two);
+    Brick one = Brick(20)
+      ..size = Vector2(50, 50)
+      ..position = Vector2(200, 200)
+      ..anchor = Anchor.topLeft;
+    add(one);
+    list.add(one);
+    Brick two = Brick(20)
+      ..position = Vector2(100, 300)
+      ..size = Vector2(30, 30)
+      ..anchor = Anchor.topLeft;
+    add(two);
 
-    // list.add(two);
+    list.add(two);
 
-    // Brick three = Brick(30, 30, 20)
-    //   ..position = Vector2(200, 300)
-    //   ..anchor = Anchor.topLeft;
-    // add(three);
+    Brick three = Brick(20)
+      ..size = Vector2(30, 30)
+      ..position = Vector2(200, 300)
+      ..anchor = Anchor.topLeft;
+    add(three);
 
-    // list.add(two);
+    list.add(three);
 
-    // Brick four = Brick(30, 30, 20)
-    //   ..position = Vector2(250, 300)
-    //   ..anchor = Anchor.topLeft;
-    // add(four);
+    Brick four = Brick(20)
+      ..size = Vector2(30, 30)
+      ..position = Vector2(250, 300)
+      ..anchor = Anchor.topLeft;
+    add(four);
 
-    // list.add(four);
+    list.add(four);
 
-    // Brick five = Brick(30, 30, 20)
-    //   ..position = Vector2(150, 300)
-    //   ..anchor = Anchor.topLeft;
-    // add(five);
-    // list.add(five);
+    Brick five = Brick(20)
+      ..size = Vector2(30, 30)
+      ..position = Vector2(150, 300)
+      ..anchor = Anchor.topLeft;
+    add(five);
+    list.add(five);
 
-    // Brick six = Brick(50, 50, 10)
-    //   ..position = Vector2(140, 200)
-    //   ..anchor = Anchor.topLeft;
-    // add(six);
+    Brick six = Brick(10)
+      ..size = Vector2(50, 50)
+      ..position = Vector2(140, 200)
+      ..anchor = Anchor.topLeft;
+    add(six);
 
-    // list.add(six);
+    list.add(six);
 
-    // Brick seven = Brick(30, 30, 5, Color.fromARGB(255, 255, 128, 0))
-    //   ..position = Vector2(180, 260)
-    //   ..anchor = Anchor.topLeft;
-    // add(seven);
+    Brick seven = Brick(5, Color.fromARGB(255, 255, 128, 0))
+      ..size = Vector2(30, 30)
+      ..position = Vector2(180, 260)
+      ..anchor = Anchor.topLeft;
+    add(seven);
 
-    // list.add(seven);
-    // Brick eight = Brick(225, 30, 20, Color.fromARGB(255, 138, 128, 128))
-    //   ..position = Vector2(80, 150)
-    //   ..anchor = Anchor.center;
-    // add(eight);
+    list.add(seven);
+    Brick eight = Brick(20, Color.fromARGB(255, 138, 128, 128))
+      ..size = Vector2(225, 30)
+      ..position = Vector2(200, 150)
+      ..anchor = Anchor.center;
+    add(eight);
 
-    // list.add(eight);
-    // Brick nine = Brick(150, 50, 20, Color.fromARGB(255, 138, 128, 128))
-    //   ..position = Vector2(120, 50)
-    //   ..size = Vector2(150, 50)
-    //   ..anchor = Anchor.topLeft;
-    // add(nine);
-    // list.add(nine);
+    list.add(eight);
+    Brick nine = Brick(20, Color.fromARGB(255, 138, 128, 128))
+      ..position = Vector2(120, 50)
+      ..size = Vector2(150, 50)
+      ..anchor = Anchor.topLeft;
+    add(nine);
+    list.add(nine);
 
     Brick ten = Brick(2, Color.fromARGB(255, 94, 2, 2))
       ..position = Vector2(30, 420)
@@ -346,16 +354,17 @@ class Brick extends PositionComponent with CollisionCallbacks {
   }
 
   //commented this out for testing the hitbox
-  // @override
-  // void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-  //   if (other is Ball) {
-  //     lives--;
-  //   }
+  @override
+  void onCollisionStart(
+      Set<Vector2> intersectionPoints, PositionComponent other) {
+    if (other is Ball) {
+      lives--;
+    }
 
-  //   if (lives <= 0) {
-  //     shouldRemove = true;
-  //   }
-  // }
+    if (lives <= 0) {
+      shouldRemove = true;
+    }
+  }
 }
 
 //Side of a brick

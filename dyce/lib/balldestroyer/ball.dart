@@ -72,21 +72,70 @@ class Ball extends PositionComponent with CollisionCallbacks {
       Set<Vector2> intersectionPoints, PositionComponent other) {
     if (other is Brick) {
       //top collision
-      bool xTopCheck = position.x + width <= other.x + other.width &&
-          position.x + width >= other.x;
-      bool yTopCheck =
-          other.y <= position.y + height || other.y + height <= position.y;
-      //print(xCheck);
+      // bool xTopCheck = position.x + width <= other.x + other.width &&
+      //     position.x + width >= other.x;
+      // bool yTopCheck =
+      //     other.y + other.height <= position.y || position.y <= other.y;
+      // print(yTopCheck);
 
-      bool xSideCheck =
-          position.x >= other.x + other.width || position.x <= other.x;
-      bool ySideCheck =
-          other.y + height <= position.y && other.y <= position.y + height;
+      // bool xSideCheck =
+      //     position.x >= other.x + other.width || position.x - width <= other.x;
+      // bool ySideCheck =
+      //     other.y + height <= position.y && other.y <= position.y + height;
 
-      if (xTopCheck && yTopCheck) {
-        direction = Vector2(direction.x, -direction.y);
-      } else if (xSideCheck && ySideCheck) {
-        direction = Vector2(-direction.x, direction.y);
+      // if (xTopCheck && yTopCheck) {
+      //   direction = Vector2(direction.x, -direction.y);
+      // } else if (xSideCheck && ySideCheck) {
+      //   direction = Vector2(-direction.x, direction.y);
+      // }
+
+      //vars are tested and work
+      var playerHalfW = width / 2;
+      var playerHalfH = height / 2;
+
+      var enemyHalfW = other.width / 2;
+      var enemyHalfH = other.height / 2;
+
+      var playerCenterX = position.x + width / 2;
+      var playerCenterY = position.y + height / 2;
+
+      var enemyCenterX = other.x + other.width / 2;
+      var enemyCenterY = other.y + other.height / 2;
+
+      // Calculate the distance between centers
+      var diffX = playerCenterX - enemyCenterX;
+      var diffY = playerCenterY - enemyCenterY;
+      var minXDist = playerHalfW + enemyHalfW;
+      var minYDist = playerHalfH + enemyHalfH;
+
+      // if the first condition is true return first value else
+      var depthX = diffX > 0 ? minXDist - diffX : -minXDist - diffX;
+      var depthY = diffY > 0 ? minYDist - diffY : -minYDist - diffY;
+
+      if (depthX != 0 && depthY != 0) {
+        //print(depthX.abs() - depthY.abs());
+        if (depthX.abs() < depthY.abs()) {
+          // Collision along the X axis. React accordingly
+          if (depthX > 0) {
+            direction = Vector2(-direction.x, direction.y);
+            position.x += direction.x * 2;
+          } else {
+            // Right side collision
+            direction = Vector2(-direction.x, direction.y);
+            position.x += direction.x * 2;
+          }
+        } else {
+          // Collision along the Y axis.
+          if (depthY > 0) {
+            // Top side collision
+            direction = Vector2(direction.x, -direction.y);
+            position.y += direction.y * 2;
+          } else {
+            // Bottom side collision
+            direction = Vector2(direction.x, -direction.y);
+            position.y += direction.y * 2;
+          }
+        }
       }
     } else if (other is Side && canCollide) {
       canCollide = false;

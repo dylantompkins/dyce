@@ -30,8 +30,9 @@ class DyceApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.lightBlue,
       ),
-      home: const MapPage(),
-      //GameWidget(game: BallDestroyer())
+      home: GameWidget(game: BallDestroyer()),
+      //const MapPage(),
+      //
       //
     );
   }
