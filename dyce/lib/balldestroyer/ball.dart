@@ -71,6 +71,18 @@ class Ball extends PositionComponent with CollisionCallbacks {
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     if (other is Brick) {
+
+
+      //first way to get hitbox
+      Vector2 point = intersectionPoints.elementAt(0);
+      bool xTopCheck = point.x <= other.x + other.width && point.x >= other.x;
+      bool yTopCheck = other.y + other.height <= point.y || point.y <= other.y;
+
+      bool xSideCheck = point.x >= other.x + other.width || point.x <= other.x;
+      bool ySideCheck = other.y + height <= point.y && other.y <= point.y;
+
+
+      //second way
       //top collision
       // bool xTopCheck = position.x + width <= other.x + other.width &&
       //     position.x + width >= other.x;
@@ -83,12 +95,16 @@ class Ball extends PositionComponent with CollisionCallbacks {
       // bool ySideCheck =
       //     other.y + height <= position.y && other.y <= position.y + height;
 
-      // if (xTopCheck && yTopCheck) {
-      //   direction = Vector2(direction.x, -direction.y);
-      // } else if (xSideCheck && ySideCheck) {
-      //   direction = Vector2(-direction.x, direction.y);
-      // }
+      if (xTopCheck && yTopCheck) {
+        direction = Vector2(direction.x, -direction.y);
+        position.add(direction);
+      } else if (xSideCheck && ySideCheck) {
+        direction = Vector2(-direction.x, direction.y);
+        position.add(direction);
+      }
 
+      //third way
+      /**
       //vars are tested and work
       var playerHalfW = width / 2;
       var playerHalfH = height / 2;
@@ -137,6 +153,7 @@ class Ball extends PositionComponent with CollisionCallbacks {
           }
         }
       }
+      */
     } else if (other is Side && canCollide) {
       canCollide = false;
 
