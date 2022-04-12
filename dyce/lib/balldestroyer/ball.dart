@@ -68,19 +68,27 @@ class Ball extends PositionComponent with CollisionCallbacks {
 
   //Hits one of the borders
   @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    // if (other is Brick) {
-    //   //top collision
-    //   bool xCheck = position.x + width > other.x + other.width &&
-    //       position.x + width > other.x;
-    //   bool yCheck =
-    //       other.y > position.y + height && other.y - (height + 10) < position.y;
+  void onCollisionStart(
+      Set<Vector2> intersectionPoints, PositionComponent other) {
+    if (other is Brick) {
+      //top collision
+      bool xTopCheck = position.x + width <= other.x + other.width &&
+          position.x + width >= other.x;
+      bool yTopCheck =
+          other.y <= position.y + height || other.y + height <= position.y;
+      //print(xCheck);
 
-    //   if (xCheck && yCheck) {
-    //     print("working");
-    //   }
-    // } else
-    if (other is Side && canCollide) {
+      bool xSideCheck =
+          position.x >= other.x + other.width || position.x <= other.x;
+      bool ySideCheck =
+          other.y + height <= position.y && other.y <= position.y + height;
+
+      if (xTopCheck && yTopCheck) {
+        direction = Vector2(direction.x, -direction.y);
+      } else if (xSideCheck && ySideCheck) {
+        direction = Vector2(-direction.x, direction.y);
+      }
+    } else if (other is Side && canCollide) {
       canCollide = false;
 
       direction = Vector2(-direction.x, direction.y);
