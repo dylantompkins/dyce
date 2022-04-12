@@ -12,6 +12,7 @@ class Player extends PositionComponent {
   Vector2 root = Vector2(0, 0);
 
   final _paint = Paint()..color = Color.fromARGB(255, 180, 17, 17);
+  final black = Paint()..color = Color.fromARGB(255, 0, 0, 0);
   int ballNums = 20;
 
   Vector2 screenSize = Vector2(0, 0);
@@ -36,6 +37,7 @@ class Player extends PositionComponent {
   @override
   void render(Canvas canvas) {
     if (inAimState) {
+      canvas.drawCircle(Offset(0, 0), 1, black);
       canvas.drawCircle(Offset(0, 0), 10, _paint);
     }
   }
@@ -58,10 +60,13 @@ class Player extends PositionComponent {
   //move ball line when screen moves
   void rotateBallLine(Vector2 thumb) {
     position.x = thumb.x;
-    if (thumb.y > screenSize.y - (screenSize.y / 3)) {
+    if (thumb.y > screenSize.y - (screenSize.y / 3.5) &&
+        thumb.y < screenSize.y - 40 &&
+        thumb.x < screenSize.x &&
+        thumb.x > 0) {
       position.y = thumb.y;
+      lastPos = thumb;
     }
-    lastPos = thumb;
   }
 
   Vector2 lastStuff() {

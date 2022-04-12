@@ -90,25 +90,26 @@ class BallDestroyer extends FlameGame with HasCollisionDetection, PanDetector {
       ..size = Vector2(30, 30)
       ..anchor = Anchor.topLeft;
     add(randomBall);
-    print(randomBall.position.x + randomBall.size.x);
 
     //Adds the boundaries
-    topBound = Top(0, 0, size.x, 15, true)
+    topBound = Top(0, 330, size.x, 15, true)
       ..position = Vector2(0, 0)
       // ..width = size.x
       // ..height = 10
       //..size = Vector2(size.x * 2, 15)
       ..anchor = Anchor.topLeft;
 
-    leftBound = Side(0, 10, 15, size.y, true)
-      ..position = Vector2(0, 0)
+    leftBound = Side()
+      ..size = Vector2(15, size.y)
+      ..position = Vector2(0, 0);
+    //..anchor = Anchor.topLeft;
+
+    rightBound = Side()
+      ..position = Vector2(size.x - 15, 10)
+      ..size = Vector2(15, size.y * 2)
       ..anchor = Anchor.topLeft;
 
-    rightBound = Side(size.x - 15, 10, 15, size.y, true)
-      ..position = Vector2(0, 0)
-      ..anchor = Anchor.center;
-
-    bottomBound = Bottom(0, size.y - 1, size.x, 15)
+    bottomBound = Bottom(0, size.y, size.x, 15)
       ..position = Vector2(0, 0)
       ..anchor = Anchor.center;
 
@@ -124,7 +125,7 @@ class BallDestroyer extends FlameGame with HasCollisionDetection, PanDetector {
 
     CircleComponent component = CircleComponent(
         radius: 10,
-        position: Vector2(size.x / 2, size.y - 15),
+        position: Vector2(size.x / 2, size.y - 16),
         paint: Paint()..color = Color.fromARGB(255, 180, 17, 17));
     component.renderShape = true;
     add(component);
@@ -186,14 +187,15 @@ class BallDestroyer extends FlameGame with HasCollisionDetection, PanDetector {
       ..anchor = Anchor.topLeft;
     add(nine);
     list.add(nine);
-    Brick ten = Brick(50, 50, 2, Color.fromARGB(255, 94, 2, 2))
-      ..position = Vector2(20, 370)
+
+    Brick ten = Brick(70, 40, 2, Color.fromARGB(255, 94, 2, 2))
+      ..position = Vector2(30, 420)
       ..anchor = Anchor.topLeft;
     add(ten);
     list.add(ten);
 
-    Brick eleve = Brick(50, 50, 2, Color.fromARGB(255, 94, 2, 2))
-      ..position = Vector2(330, 370)
+    Brick eleve = Brick(70, 40, 2, Color.fromARGB(255, 94, 2, 2))
+      ..position = Vector2(290, 420)
       ..anchor = Anchor.topLeft;
     add(eleve);
     list.add(eleve);
@@ -232,10 +234,6 @@ class BallDestroyer extends FlameGame with HasCollisionDetection, PanDetector {
       time -= dt;
     }
 
-    if (ballCount <= maxBalls) {
-      spawnBall.update(dt);
-    }
-
     for (int i = 0; i < list.length; i++) {
       if (list[i].life() <= 0) {
         list.removeAt(i);
@@ -247,7 +245,15 @@ class BallDestroyer extends FlameGame with HasCollisionDetection, PanDetector {
         listOfBalls.removeAt(i);
       }
     }
-    if (listOfBalls.length <= 0) {
+
+    if (ballCount > 0) {
+      spawnBall.update(dt);
+    } else {
+      ballCount = 20;
+      spawnBall.stop();
+    }
+
+    if (listOfBalls.isEmpty) {
       isInGame = false;
     } else {
       isInGame = true;
@@ -279,29 +285,27 @@ class BallDestroyer extends FlameGame with HasCollisionDetection, PanDetector {
   void onPanEnd(DragEndInfo info) {
     if (!isInGame) {
       player.releaseBalls();
-      double botScreenX = size.x / 2;
-      double botScreenY = size.y - 15;
+      double botScreenX = (size.x / 2) + 10;
+      double botScreenY = size.y - 6;
 
       double xVel = (player.lastStuff().x - botScreenX);
       double yVel = (player.lastStuff().y - (size.y - 15));
 
-      spawnBall.onTick = () async {
+      spawnBall.onTick = () {
         Ball ball = Ball(player.calculateSpeed(
             (player.lastStuff().x - (size.x / 2)),
             (player.lastStuff().y - (size.y - 15)),
             10))
-          ..position = Vector2(size.x / 2, size.y - 15)
-          ..anchor = Anchor.topLeft
+          ..position = Vector2((size.x / 2) + 10, size.y - 6)
+          ..anchor = Anchor.center
           ..size.x = 10
           ..size.y = 10;
         add(ball);
         listOfBalls.add(ball);
-        ballCount++;
+        ballCount--;
       };
-
       spawnBall.start();
     }
-    ballCount = 0;
   }
 }
 
@@ -321,7 +325,7 @@ class Brick extends PositionComponent with CollisionCallbacks {
 
     _paint.color = color;
 
-    Side middle = Side(-0.25, 0, w + 0.25, h, false);
+    Side middle = Side();
     add(middle);
 
     Top top = Top(0, -0.5, w, h / 20, true);
@@ -362,30 +366,16 @@ class Brick extends PositionComponent with CollisionCallbacks {
 //Side of a brick
 class Side extends PositionComponent with CollisionCallbacks {
   final _paint = Paint()..color = Colors.white;
-  late double l;
-  late double t;
-  late double w;
-  late double h;
-  late bool show;
-  Side(double left, double top, double width, double height, bool s) {
-    l = left;
-    t = top;
-    w = width;
-    h = height;
-    show = s;
-  }
 
   //hitbox for the rectangle
   Future<void> onLoad() async {
-    add(RectangleHitbox(
-        position: Vector2(l, t), size: Vector2(w, h), anchor: Anchor.topLeft));
+    add(RectangleHitbox());
   }
 
   @override
   void render(Canvas canvas) {
-    if (show) {
-      canvas.drawRect(Rect.fromLTWH(l, t, w, h), _paint);
-    }
+    canvas.drawRect(Rect.fromLTWH(0, 0, size.x, size.y), _paint);
+    //canvas.drawRect( Rect.LFRB(Offset(size.x / 2, size.y / 2), width: size.x, height: size.y) );
   }
 }
 
@@ -410,7 +400,8 @@ class Top extends PositionComponent with CollisionCallbacks {
 
   //hitbox for the rectangle
   Future<void> onLoad() async {
-    add(RectangleHitbox(position: Vector2(l, t), size: Vector2(w, h + 10)));
+    add(RectangleHitbox(
+        position: Vector2(l, t), size: Vector2(w, h + 10), priority: 1));
   }
 
   @override

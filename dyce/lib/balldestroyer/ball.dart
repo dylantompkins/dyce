@@ -12,6 +12,7 @@ import 'package:flame/collisions.dart';
 */
 class Ball extends PositionComponent with CollisionCallbacks {
   final _paint = Paint()..color = Color.fromARGB(255, 180, 17, 17);
+  final black = Paint()..color = Color.fromARGB(255, 0, 0, 0);
   Vector2 direction = Vector2(0, 0);
   bool canCollide = true;
   double tCollide = 0;
@@ -28,13 +29,14 @@ class Ball extends PositionComponent with CollisionCallbacks {
   //renders the block(Ball)
   @override
   void render(Canvas canvas) {
-    canvas.drawCircle(Offset(size.x / 2, size.y / 2), size.x / 2, _paint);
+    canvas.drawCircle(Offset(size.x / 2, 0), size.x / 2, _paint);
   }
 
   //Hitbox for the ball
   //hitbox for the rectangle
   Future<void> onLoad() async {
-    add(CircleHitbox(radius: size.x / 2));
+    //add(CircleHitbox(position: Vector2(0, 0), radius: size.x / 2));
+    add(CircleHitbox());
     //add(RectangleHitbox());
   }
 
@@ -67,17 +69,18 @@ class Ball extends PositionComponent with CollisionCallbacks {
   //Hits one of the borders
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if (other is Brick) {
-      //top collision
-      bool xCheck = position.x + width > other.x + other.width &&
-          position.x + width > other.x;
-      bool yCheck =
-          other.y > position.y + height && other.y - (height + 10) < position.y;
+    // if (other is Brick) {
+    //   //top collision
+    //   bool xCheck = position.x + width > other.x + other.width &&
+    //       position.x + width > other.x;
+    //   bool yCheck =
+    //       other.y > position.y + height && other.y - (height + 10) < position.y;
 
-      if (xCheck && yCheck) {
-        print("working");
-      }
-    } else if (other is Side && canCollide) {
+    //   if (xCheck && yCheck) {
+    //     print("working");
+    //   }
+    // } else
+    if (other is Side && canCollide) {
       canCollide = false;
 
       direction = Vector2(-direction.x, direction.y);
