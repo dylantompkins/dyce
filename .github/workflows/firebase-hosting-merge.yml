@@ -33,5 +33,6 @@ jobs:
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_DYCE_346806 }}"
           channelId: live
           projectId: dyce-346806
+          entryPoint: ./dyce
         env:
           FIREBASE_CLI_PREVIEWS: hostingchannels
