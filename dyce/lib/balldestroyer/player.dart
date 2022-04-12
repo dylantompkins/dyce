@@ -60,6 +60,7 @@ class Player extends PositionComponent {
   //move ball line when screen moves
   void rotateBallLine(Vector2 thumb) {
     position.x = thumb.x;
+    
     if (thumb.y > screenSize.y - (screenSize.y / 3.5) &&
         thumb.y < screenSize.y - 40 &&
         thumb.x < screenSize.x &&
