@@ -29,7 +29,7 @@ class Ball extends PositionComponent with CollisionCallbacks {
   //renders the block(Ball)
   @override
   void render(Canvas canvas) {
-    canvas.drawCircle(Offset(size.x / 2, 0), size.x / 2, _paint);
+    canvas.drawCircle(Offset(size.x / 2, size.y / 2), size.x / 2, _paint);
   }
 
   //Hitbox for the ball
@@ -71,86 +71,26 @@ class Ball extends PositionComponent with CollisionCallbacks {
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     if (other is Brick) {
-      //first way to get hitbox
-      Vector2 point = intersectionPoints.elementAt(0);
-      bool xTopCheck = point.x <= other.x + other.width && point.x >= other.x;
-      bool yTopCheck = other.y + other.height <= point.y || point.y <= other.y;
+      Vector2 point = position + Vector2(size.x / 2, size.y / 2);
+      other.hit();
 
-      bool xSideCheck = point.x >= other.x + other.width || point.x <= other.x;
-      bool ySideCheck = other.y + height <= point.y && other.y <= point.y;
-
-      //second way
-      //top collision
-      // bool xTopCheck = position.x + width <= other.x + other.width &&
-      //     position.x + width >= other.x;
-      // bool yTopCheck =
-      //     other.y + other.height <= position.y || position.y <= other.y;
-      // print(yTopCheck);
-
-      // bool xSideCheck =
-      //     position.x >= other.x + other.width || position.x - width <= other.x;
-      // bool ySideCheck =
-      //     other.y + height <= position.y && other.y <= position.y + height;
-
-      if (xTopCheck && yTopCheck) {
-        direction = Vector2(direction.x, -direction.y);
-        position.add(direction);
-      } else if (xSideCheck && ySideCheck) {
+      //left or right
+      if (point.x > other.x + other.width) {
         direction = Vector2(-direction.x, direction.y);
-        position.add(direction);
+        print("right");
+      } else if (point.x < other.x) {
+        print("brick x ${other.x}");
+        print("ball x ${point.x}");
+        direction = Vector2(-direction.x, direction.y);
+        print("left");
       }
 
-      //third way
-      /**
-      //vars are tested and work
-      var playerHalfW = width / 2;
-      var playerHalfH = height / 2;
-
-      var enemyHalfW = other.width / 2;
-      var enemyHalfH = other.height / 2;
-
-      var playerCenterX = position.x + width / 2;
-      var playerCenterY = position.y + height / 2;
-
-      var enemyCenterX = other.x + other.width / 2;
-      var enemyCenterY = other.y + other.height / 2;
-
-      // Calculate the distance between centers
-      var diffX = playerCenterX - enemyCenterX;
-      var diffY = playerCenterY - enemyCenterY;
-      var minXDist = playerHalfW + enemyHalfW;
-      var minYDist = playerHalfH + enemyHalfH;
-
-      // if the first condition is true return first value else
-      var depthX = diffX > 0 ? minXDist - diffX : -minXDist - diffX;
-      var depthY = diffY > 0 ? minYDist - diffY : -minYDist - diffY;
-
-      if (depthX != 0 && depthY != 0) {
-        //print(depthX.abs() - depthY.abs());
-        if (depthX.abs() < depthY.abs()) {
-          // Collision along the X axis. React accordingly
-          if (depthX > 0) {
-            direction = Vector2(-direction.x, direction.y);
-            position.x += direction.x * 2;
-          } else {
-            // Right side collision
-            direction = Vector2(-direction.x, direction.y);
-            position.x += direction.x * 2;
-          }
-        } else {
-          // Collision along the Y axis.
-          if (depthY > 0) {
-            // Top side collision
-            direction = Vector2(direction.x, -direction.y);
-            position.y += direction.y * 2;
-          } else {
-            // Bottom side collision
-            direction = Vector2(direction.x, -direction.y);
-            position.y += direction.y * 2;
-          }
-        }
+      //top or bottom
+      if (point.y < other.y) {
+        direction = Vector2(direction.x, -direction.y);
+      } else if (point.y > other.y + other.height) {
+        direction = Vector2(direction.x, -direction.y);
       }
-      */
     } else if (other is Side && canCollide) {
       canCollide = false;
 
@@ -164,22 +104,22 @@ class Ball extends PositionComponent with CollisionCallbacks {
     canCollide = true;
   }
 
-  @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if (other is Brick) {
-      Vector2 point = intersectionPoints.elementAt(0);
-      bool xTopCheck = point.x <= other.x + other.width && point.x >= other.x;
-      bool yTopCheck = other.y + other.height <= point.y || point.y <= other.y;
+  // @override
+  // void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+  //   if (other is Brick) {
+  //     Vector2 point = intersectionPoints.elementAt(0);
+  //     bool xTopCheck = point.x <= other.x + other.width && point.x >= other.x;
+  //     bool yTopCheck = other.y + other.height <= point.y || point.y <= other.y;
 
-      bool xSideCheck = point.x >= other.x + other.width || point.x <= other.x;
-      bool ySideCheck = other.y + height <= point.y && other.y <= point.y;
-      if (xTopCheck && yTopCheck) {
-        position.y += (direction.y);
-      } else if (xSideCheck && ySideCheck) {
-        position.y += (direction.x);
-      }
-    }
-  }
+  //     bool xSideCheck = point.x >= other.x + other.width || point.x <= other.x;
+  //     bool ySideCheck = other.y + height <= point.y && other.y <= point.y;
+  //     if (xTopCheck && yTopCheck) {
+  //       position.y += (direction.y);
+  //     } else if (xSideCheck && ySideCheck) {
+  //       position.y += (direction.x);
+  //     }
+  //   }
+  // }
 
   @override
   void onCollisionEnd(PositionComponent other) {

@@ -49,7 +49,7 @@ class BallDestroyer extends FlameGame with HasCollisionDetection, PanDetector {
 
   double time = 3;
 
-  int ballCount = 0;
+  int ballCount = 20;
   int maxBalls = 20;
 
   int bricksLeft = 11;
@@ -127,8 +127,9 @@ class BallDestroyer extends FlameGame with HasCollisionDetection, PanDetector {
     //Hardcoded bricks
     Brick one = Brick(20)
       ..size = Vector2(50, 50)
-      ..position = Vector2(200, 200)
-      ..anchor = Anchor.topLeft;
+      ..anchor = Anchor.topLeft
+      ..position = Vector2(200, 200);
+
     add(one);
     list.add(one);
     Brick two = Brick(20)
@@ -179,8 +180,8 @@ class BallDestroyer extends FlameGame with HasCollisionDetection, PanDetector {
     list.add(seven);
     Brick eight = Brick(20, Color.fromARGB(255, 138, 128, 128))
       ..size = Vector2(225, 30)
-      ..position = Vector2(200, 150)
-      ..anchor = Anchor.center;
+      ..position = Vector2(100, 150)
+      ..anchor = Anchor.topLeft;
     add(eight);
 
     list.add(eight);
@@ -300,9 +301,9 @@ class BallDestroyer extends FlameGame with HasCollisionDetection, PanDetector {
         Ball ball = Ball(player.calculateSpeed(
             (player.lastStuff().x - (size.x / 2)),
             (player.lastStuff().y - (size.y - 15)),
-            10))
-          ..position = Vector2((size.x / 2) + 10, size.y - 6)
-          ..anchor = Anchor.center
+            5))
+          ..position = Vector2((size.x / 2), size.y - 20)
+          ..anchor = Anchor.topLeft
           ..size.x = 10
           ..size.y = 10;
         add(ball);
@@ -349,22 +350,29 @@ class Brick extends PositionComponent with CollisionCallbacks {
   @override
   void render(Canvas canvas) {
     canvas.drawRect(Rect.fromLTWH(0, 0, size.x, size.y), _paint);
+
     text.render(canvas, "$lives", Vector2(size.x / 2, size.y / 2),
         anchor: Anchor.center);
   }
 
-  //commented this out for testing the hitbox
-  @override
-  void onCollisionStart(
-      Set<Vector2> intersectionPoints, PositionComponent other) {
-    if (other is Ball) {
-      lives--;
-    }
-
+  void hit() {
+    lives--;
     if (lives <= 0) {
       shouldRemove = true;
     }
   }
+  //commented this out for testing the hitbox
+  // @override
+  // void onCollisionStart(
+  //     Set<Vector2> intersectionPoints, PositionComponent other) {
+  //   if (other is Ball) {
+  //     lives--;
+  //   }
+
+  //   if (lives <= 0) {
+  //     shouldRemove = true;
+  //   }
+  // }
 }
 
 //Side of a brick
