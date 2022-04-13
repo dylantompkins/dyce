@@ -115,8 +115,8 @@ class _MapPageState extends State<MapPage> {
 
             return FlutterMap(
               options: MapOptions(
-                center: LatLng(35.301366049343784, -120.66240555707458),
-                zoom: 17.0,
+                center: currLoc,
+                zoom: 15.0,
               ),
               layers: [
                 TileLayerOptions(
